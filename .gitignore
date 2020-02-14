@@ -9,7 +9,6 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-venv/
 build/
 develop-eggs/
 dist/
@@ -71,6 +70,8 @@ _source/
 
 tfl/apps/contracts/migrations/__init__.py~new_db_version
 
+.flaskenv
+.vscode/
+flask/
 migrations/
 
-site.db

@@ -29,6 +29,7 @@ parserPage.add_argument('page',type=int, default=1)
 @users.route('/<string:email>/<string:password>')
 class GET_User(Resource):
     def get(self,email,password):
+        '''get user by matching usrname and password'''
         user = User.query.filter_by(email=email).first()
         if not user:
            return 'User Not Found', 404
@@ -37,8 +38,9 @@ class GET_User(Resource):
         return jsonify(user_schema.dump(user))
 
 @users.route('/<int:user_id>')
-class GET_UserById(Resource):
+class Requests_UserById(Resource):
     def get(self,user_id):
+        '''get a user by id'''
         user = User.query.get(user_id)
         if not user:
             return 'User Not Found', 404
@@ -46,6 +48,7 @@ class GET_UserById(Resource):
 
     @users.expect(userModel, validate=True)
     def put(self,user_id):
+        '''update user data'''
         user = User.query.get(user_id)
         if not user:
            return 'User Not Found', 404
@@ -58,6 +61,7 @@ class GET_UserById(Resource):
         return jsonify(user_schema.dump(user))
 
     def delete(self,user_id):
+        '''delete a user'''
         try:
             user = User.query.get(user_id)
             if not user:
@@ -69,10 +73,11 @@ class GET_UserById(Resource):
             return 'Error Server Side', 500
 
 @users.route('')
-class POST_User(Resource):
+class General_Users_Requests(Resource):
     @users.expect(userModel, validate=True)
     @users.doc(responses=resp)
     def post(self):
+            '''Register a user'''
             username = request.get_json()['username'] 
             password = request.get_json()['password']
             image_file =  request.get_json()['image_file'] 
@@ -88,6 +93,7 @@ class POST_User(Resource):
 
     @users.expect(parserId, parserPage)
     def get(self):
+        '''get all users or 1'''
         if request.args.get('user_id'):
             user_id=request.args.get('user_id')
             user = User.query.get(user_id)

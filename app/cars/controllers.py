@@ -40,8 +40,9 @@ parserPage.add_argument('page',type=int, default=1)
 
 
 @cars.route('/<int:car_id>')
-class GET_CarById(Resource):
+class CarById_Requests(Resource):
     def get(self,car_id):
+        '''get a car'''
         car = Car.query.get(car_id)
         if not car:
             return 'car Not Found', 404
@@ -54,6 +55,7 @@ class GET_CarById(Resource):
 
     @cars.expect(carModel,parserUserId , validate=True)
     def put(self,car_id):
+        '''update car data'''
         car = Car.query.get(car_id)
         if not car:
            return 'car Not Found', 404
@@ -83,6 +85,7 @@ class GET_CarById(Resource):
 
     @cars.expect(parserUserId)
     def delete(self,car_id):
+        '''delete a car'''
         try:
             id_user = int(request.args.get('id_user'))
             car = Car.query.get(car_id)
@@ -103,6 +106,7 @@ class GET_CarById(Resource):
 @cars.route('/<int:car_id>/<int:car_data_code>')
 class GET_DataByCode(Resource):
     def get(self,car_id,car_data_code):
+        '''get a car_data by code'''
         car = Car.query.get(car_id)
         if not car:
             return 'car Not Found', 404
@@ -113,10 +117,11 @@ class GET_DataByCode(Resource):
 
 
 @cars.route('')
-class POST_Car(Resource):
+class General_Car_Requests(Resource):
     @cars.expect(carModel,parserUserId, validate=True)
     @cars.doc(responses=resp)
     def post(self):
+            '''register a car'''
             name = request.get_json()['name'] 
             fuel = request.get_json()['fuel']
             image_file =  request.get_json()['image_file'] 
@@ -147,6 +152,7 @@ class POST_Car(Resource):
 
     @cars.expect(parserId, parserUserId, parserPage)
     def get(self):
+        '''get all car owned by a user or 1'''
         if  request.args.get('id_user'):
             id_user=request.args.get('id_user')
             #cars = Car.query.filter_by(id_user=id_user).all()

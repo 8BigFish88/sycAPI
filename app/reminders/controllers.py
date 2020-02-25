@@ -31,8 +31,9 @@ parserPage = reqparse.RequestParser()
 parserPage.add_argument('page',type=int, default=1)
 
 @reminders.route('/<int:reminder_id>')
-class GET_reminderById(Resource):
+class Requests_reminderById(Resource):
     def get(self,reminder_id):
+        '''get a single reminder'''
         reminder = Reminder.query.get(reminder_id)
         if not reminder:
             return 'reminder Not Found', 404
@@ -40,6 +41,7 @@ class GET_reminderById(Resource):
 
     @reminders.expect(reminderModel, validate=True)
     def put(self,reminder_id):
+        '''modifie a reminder text'''
         reminder = Reminder.query.get(reminder_id)
         if not reminder:
            return 'reminder Not Found', 404
@@ -49,6 +51,7 @@ class GET_reminderById(Resource):
         return jsonify(reminder_schema.dump(reminder))
 
     def delete(self,reminder_id):
+        '''delete a reminder'''
         try:
             reminder = Reminder.query.get(reminder_id)
             if not reminder:
@@ -61,6 +64,7 @@ class GET_reminderById(Resource):
 
     @reminders.expect(parserIdCarData, validate=True)
     def post(self,reminder_id):
+        '''insert a reminder to a car_data'''
         id_CarData = int(request.args.get('id_CarData'))
         car_data = CarData.query.get(id_CarData)
         if not car_data:
@@ -74,10 +78,11 @@ class GET_reminderById(Resource):
 
 
 @reminders.route('')
-class POST_reminder(Resource):
+class General_reminder_requests(Resource):
     @reminders.expect(reminderModel, validate=True)
     @reminders.doc(responses=resp)
     def post(self):
+            '''Insert a reminder'''
             text = request.get_json()['text'] 
             new_reminder = Reminder(
             text=text)
@@ -87,6 +92,7 @@ class POST_reminder(Resource):
 
     @reminders.expect(parserId, parserPage)
     def get(self):
+        '''get all reminders or 1'''
         if request.args.get('reminder_id'):
             reminder_id=request.args.get('reminder_id')
             reminder = Reminder.query.get(reminder_id)
@@ -104,8 +110,9 @@ class POST_reminder(Resource):
             return jsonify(response)
 
 @reminders.route('/car/<int:car_id>')
-class Get_car_reminders(Resource):
+class Car_reminders_requests(Resource):
     def get(self,car_id):
+        '''get all data and reminder of a car'''
         car = Car.query.get(car_id)
         if not car:
                 return 'Car Not Found', 404
@@ -137,6 +144,7 @@ class Get_car_reminders(Resource):
 @reminders.route('/car/<int:car_id>/<int:car_data_id>')
 class Delete_car_reminder(Resource):
     def delete(self,car_id, car_data_id):
+        '''delete a reminder from a car_data'''
         car = Car.query.get(car_id)
         if not car:
                 return 'Car Not Found', 404

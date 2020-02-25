@@ -10,22 +10,8 @@ class Reminder(db.Model):
 
     def __repr__(self):
         return f"Reminder('{self.text}')"
-"""
-class ReminderCarData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    id_car_data = db.Column(db.Integer, db.ForeignKey('car_data.id'), nullable=False)
-    id_reminder = db.Column(db.Integer, db.ForeignKey('reminder.id'), nullable=False)
-"""
-
-
 
 class ReminderSchema(ModelSchema):
     class Meta:
         model = Reminder
         sqla_session = db.session
-"""
-class ReminderCarDataSchema(ModelSchema):
-    class Meta:
-        model = ReminderCarData
-        sqla_session = db.session
-"""

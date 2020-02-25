@@ -7,9 +7,6 @@ from app import app
 from datetime import datetime
 import requests
 
-resp = {200: 'Success', 400: 'Car already in db', 406: 'Content not allowed', \
-    413: 'Payload too large', 500: 'Server Error', 404: 'car Not Found' }
-
 cars = api.namespace('api/v1.0/cars',description='CRUD operation for syc cars')
 
 car_schema = CarSchema()
@@ -98,8 +95,8 @@ class CarById_Requests(Resource):
                 db.session.delete(car)
                 db.session.commit()
                 return jsonify({'result': True})
-            #else:
-            #   return 'Action Forbidden', 403
+            else:
+                return 'Action Forbidden', 403
         except:
             return 'Error Server Side', 500
 
@@ -119,7 +116,6 @@ class GET_DataByCode(Resource):
 @cars.route('')
 class General_Car_Requests(Resource):
     @cars.expect(carModel,parserUserId, validate=True)
-    @cars.doc(responses=resp)
     def post(self):
             '''register a car'''
             name = request.get_json()['name'] 

@@ -5,9 +5,6 @@ from app import api
 from app import db
 from app import app
 
-resp = {200: 'Success', 400: 'User already in db', 406: 'Content not allowed', \
-    413: 'Payload too large', 500: 'Server Error', 404: 'User Not Found' }
-
 users = api.namespace('api/v1.0/users',description='CRUD operation for syc users')
 
 user_schema = UserSchema()
@@ -75,7 +72,6 @@ class Requests_UserById(Resource):
 @users.route('')
 class General_Users_Requests(Resource):
     @users.expect(userModel, validate=True)
-    @users.doc(responses=resp)
     def post(self):
             '''Register a user'''
             username = request.get_json()['username'] 

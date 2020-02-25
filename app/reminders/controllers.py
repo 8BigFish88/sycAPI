@@ -6,16 +6,12 @@ from app import api
 from app import db
 from app import app
 
-resp = {200: 'Success', 400: 'reminder already in db', 406: 'Content not allowed', \
-    413: 'Payload too large', 500: 'Server Error', 404: 'reminder Not Found' }
-
 reminders = api.namespace('api/v1.0/reminders',description='CRUD operation for syc reminders')
 
 car_schema = CarSchema()
 reminder_schema = ReminderSchema()
 car_data_schema = CarDataSchema()
 reminders_schema = ReminderSchema(many=True)
-#reminder_car_data_schema = ReminderCarDataSchema()
 
 reminderModel = reminders.model('reminderModel', {
     'text' : fields.String(required=True, validate=True)
@@ -80,7 +76,6 @@ class Requests_reminderById(Resource):
 @reminders.route('')
 class General_reminder_requests(Resource):
     @reminders.expect(reminderModel, validate=True)
-    @reminders.doc(responses=resp)
     def post(self):
             '''Insert a reminder'''
             text = request.get_json()['text'] 
@@ -109,6 +104,11 @@ class General_reminder_requests(Resource):
             response["data"]=reminders_schema.dump(reminders)
             return jsonify(response)
 
+# Questo è l'end-point più importante.
+# Infatti, oltre a restituire tutti i dati di un'auto,
+# aggiorna i reminder. Aggiungendoli ai car_data qualora
+# sia necessario o eliminandoli in caso non ne avessero più bisogno.
+# Restituisce quindi i dati, associati ai loro reminders.
 @reminders.route('/car/<int:car_id>')
 class Car_reminders_requests(Resource):
     def get(self,car_id):

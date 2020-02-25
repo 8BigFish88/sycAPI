@@ -5,6 +5,7 @@ from app import api
 from app import db
 from app import app
 from datetime import datetime
+import requests
 
 resp = {200: 'Success', 400: 'Car already in db', 406: 'Content not allowed', \
     413: 'Payload too large', 500: 'Server Error', 404: 'car Not Found' }
@@ -59,22 +60,24 @@ class GET_CarById(Resource):
         car.name = request.get_json()['name'] if request.get_json()['name'] else car.name
         car.fuel = request.get_json()['fuel'] if request.get_json()['fuel'] else car.fuel
         car.image_file =  request.get_json()['image_file'] if request.get_json()['image_file'] else car.image_file
-        matriculation =  request.get_json()['matriculation'] if request.get_json()['matriculation'] else car.matriculation
-        car.matriculation=datetime.strptime(matriculation, '%m/%d/%Y')
+        car.matriculation =  datetime.strptime(request.get_json()['matriculation'], '%m/%d/%Y') if request.get_json()['matriculation'] else car.matriculation
         car.id_user = request.args.get('id_user') if request.args.get('id_user') else car.id_user
         db.session.commit()
-        detected_kms = request.get_json()['detected_kms'] if request.get_json()['detected_kms'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=1).first()
-        CarData.add_dataInt(car,1,detected_kms) 
-        review_date= request.get_json()['review_date'] if request.get_json()['review_date'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=2).first()
-        CarData.add_dataDate(car,2,review_date)
-        check_km= request.get_json()['check_km'] if request.get_json()['check_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=3).first()
-        CarData.add_dataInt(car,3,check_km)
-        assurance_date= request.get_json()['assurance_date'] if request.get_json()['assurance_date'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=4).first()
-        CarData.add_dataDate(car,4,assurance_date)
-        tax_date= request.get_json()['tax_date'] if request.get_json()['tax_date'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=5).first()
-        CarData.add_dataDate(car,5,tax_date)
-        avarage_km= request.get_json()['avarage_km'] if request.get_json()['avarage_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=6).first()
-        CarData.add_dataInt(car,6,avarage_km)
+        car_data = request.get_json()
+        detected_kms = CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=1).first()
+        print(detected_kms)
+        detected_kms = car_data.get('detected_kms') if car_data.get('detected_kms') else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=1).first().dataInt
+        CarData.update_dataInt(car,1,detected_kms) 
+        if request.get_json()['review_date']:
+            CarData.update_dataDate(car,2,request.get_json()['review_date'])
+        check_km= request.get_json()['check_km'] if request.get_json()['check_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=3).first().dataInt
+        CarData.update_dataInt(car,3,check_km)
+        if request.get_json()['assurance_date']:
+            CarData.update_dataDate(car,4,request.get_json()['assurance_date'])
+        if request.get_json()['tax_date']:
+            CarData.update_dataDate(car,5,request.get_json()['tax_date'])
+        avarage_km= request.get_json()['avarage_km'] if request.get_json()['avarage_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=6).first().dataInt
+        CarData.update_dataInt(car,6,avarage_km)
         db.session.commit()
         return jsonify(car_schema.dump(car))
 

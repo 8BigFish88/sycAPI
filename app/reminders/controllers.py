@@ -113,6 +113,23 @@ class Get_car_reminders(Resource):
         response['car'] = car_schema.dump(car)
         response['car_data'] = []
         for carData in car.carData:
+            if (carData.carDataCode == 2) and (CarData.revisione(car,carData.dataDate)):
+                carData.id_reminder = 2
+            elif (carData.carDataCode == 2) and not (CarData.revisione(car,carData.dataDate)):
+                carData.id_reminder == None
+            if (carData.carDataCode == 3) and (CarData.tagliando(car, carData.dataInt, CarData.GetKm(car, car.carData), CarData.GetDateDetection(car, car.carData))):
+                carData.id_reminder = 1
+            elif (carData.carDataCode == 2) and not (CarData.tagliando(car, carData.dataInt, CarData.GetKm(car, car.carData), CarData.GetDateDetection(car, car.carData))):
+                carData.id_reminder = None
+            if (carData.carDataCode == 4) and (CarData.assicurazione(car, carData.dataDate)):
+                carData.id_reminder = 3
+            elif (carData.carDataCode == 4) and not (CarData.assicurazione(car, carData.dataDate)):
+                carData.id_reminder = None
+            if (carData.carDataCode == 5) and (CarData.bollo(car, carData.dataDate)):
+                carData.id_reminder = 4
+            elif (carData.carDataCode == 5) and not (CarData.bollo(car, carData.dataDate)):
+                carData.id_reminder = None
+            db.session.commit()
             response['car_data'].append(reminder_schema.dump(carData.reminder)) 
             response['car_data'].append(car_data_schema.dump(carData))
         return jsonify(response)

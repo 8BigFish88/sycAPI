@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app import db
 from marshmallow_sqlalchemy import ModelSchema
 
@@ -23,7 +23,7 @@ class CarData(db.Model):
     id_reminder = db.Column(db.Integer, db.ForeignKey('reminder.id'), nullable=True)
     
     def __repr__(self):
-        return f"CarData('{self.valueInt}', '{self.valueDate}')"
+        return f"CarData('{self.dataInt}', '{self.dataDate}')"
 
     def add_dataInt(car,carDataCode,value):
         carValue = CarData(dataInt = value, carDataCode = carDataCode, car_author = car )
@@ -32,6 +32,77 @@ class CarData(db.Model):
     def add_dataDate(car,carDataCode,value):
         carValue = CarData(dataDate = datetime.strptime(value, '%m/%d/%Y'), carDataCode = carDataCode, car_author = car )
         db.session.add(carValue)
+
+    def update_dataInt(car,carDataCode,value):
+        car_data =CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=carDataCode).first()
+        car_data.dataInt = value
+    
+    def update_dataDate(car,carDataCode,value):
+        car_data =CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=carDataCode).first()
+        car_data.dataDate = value
+
+    def GetKm(car, carvalues):
+	    for carvalue in carvalues:
+		    if carvalue.carDataCode == 6:
+			    kmMedi = carvalue.dataInt
+			    return kmMedi
+
+    def GetDateDetection(car, carvalues):
+	    for carvalue in carvalues:
+		    if carvalue.carDataCode == 1:
+			    rilievo = [carvalue.dataDate, carvalue.dataInt]
+			    return rilievo
+
+    def revisione(car, value):
+        if ((((datetime.now() - value >= timedelta(days=730) - timedelta(days=30)) 
+				and 
+				(datetime.now() - car.matriculation >= timedelta(days=1460)) 
+				)
+				or 
+				(
+				(datetime.now() - car.matriculation < timedelta(days=1460))
+				and (timedelta(days=1460) - (datetime.now() - car.matriculation) <= timedelta(days=30)) 
+				)
+				)):
+                return True
+        else:
+		        return False
+
+    def assicurazione(car, date):
+        if (datetime.now() >= date - timedelta(days=30)):
+            return True 
+        else:
+            return False
+
+    def tagliando(car, value, kmMedi, rilievo):
+        if (
+			((rilievo[1] + (kmMedi*((datetime.now() - rilievo[0])/timedelta(days=7))))-value > 30000)
+			):
+            return True 
+        else:
+            return False
+
+    def bollo(car, value):
+        if (datetime.now() >= value - timedelta(days=30)):
+            return True
+        else:
+            return False
+
+    def revisione(car, value):
+        if ((((datetime.now() - value >= timedelta(days=730) - timedelta(days=30)) 
+				and 
+				(datetime.now() - car.matriculation >= timedelta(days=1460)) 
+				)
+				or 
+				(
+				(datetime.now() - car.matriculation < timedelta(days=1460))
+				and 
+				(timedelta(days=1460) - (datetime.now() - car.matriculation) <= timedelta(days=30)) 
+				)
+				)):
+                return True
+        else:
+            return False
 	    
 
 

@@ -1,4 +1,3 @@
-from flask_admin.contrib.sqla import ModelView
 from marshmallow_sqlalchemy import ModelSchema
 from app.cars.models import Car, CarData
 from app import db

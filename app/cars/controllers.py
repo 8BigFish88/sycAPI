@@ -5,7 +5,6 @@ from app import api
 from app import db
 from app import app
 from datetime import datetime
-import requests
 
 cars = api.namespace('api/v1.0/cars',description='CRUD operation for syc cars')
 

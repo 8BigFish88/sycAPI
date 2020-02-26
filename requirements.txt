@@ -1,5 +1,7 @@
 flask
 flask-restplus
+flask-restful
 flask-sqlalchemy
 flask-migrate
 marshmallow-sqlalchemy
+gunicorn

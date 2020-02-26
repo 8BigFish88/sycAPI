@@ -47,7 +47,7 @@ class CarData(db.Model):
     @staticmethod
     def update_dataDate(car,carDataCode,value):
         car_data =CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=carDataCode).first()
-        car_data.dataDate = value
+        car_data.dataDate = datetime.strptime(value, '%m/%d/%Y')
 
     # Metodo che ritorna i km medi associati ad un'auto
     @staticmethod

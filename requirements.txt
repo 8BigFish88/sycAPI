@@ -6,4 +6,5 @@ flask-migrate
 marshmallow-sqlalchemy
 psycopg2
 Werkzeug==0.14.1
+wrapt==1.11.2
 gunicorn

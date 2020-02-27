@@ -4,10 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config['DATABASE_URL'] = 'postgres://mhtsdvfq:yOhNRqRkv7XmSoYEMY4pgvM3AmrpTC-0@kandula.db.elephantsql.com:5432/mhtsdvfq'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['PER_PAGE'] = 6
 db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://mhtsdvfq:yOhNRqRkv7XmSoYEMY4pgvM3AmrpTC-0@kandula.db.elephantsql.com:5432/mhtsdvfq'
 migrate = Migrate(app, db)
 api = Api(app, version='1.0', title='SYC API')
 

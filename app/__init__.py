@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config['DATABASE_URL'] = 'postgres://dutufrppfjvlam:516671303cf21a6eeb9fbe7b987de74022fbeaa7c95b1961ba9569b0f8086fbd@ec2-54-75-231-215.eu-west-1.compute.amazonaws.com:5432/d3ogkdt514ripf'
+app.config['DATABASE_URL'] = 'postgres://rmjbezokjkyagx:8c9afbc899de855cb3e60c36f06f5740589bb2ddb4e4f5bbc5b16d4f3815fea5@ec2-54-75-231-215.eu-west-1.compute.amazonaws.com:5432/df34oalf5k8a2j'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['PER_PAGE'] = 6
 db = SQLAlchemy(app)

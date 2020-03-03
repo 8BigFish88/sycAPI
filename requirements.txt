@@ -3,6 +3,7 @@ flask
 flask-restplus==0.13.0
 flask-sqlalchemy
 flask-migrate
+flask-cors
 marshmallow-sqlalchemy
 psycopg2
 Werkzeug==0.16.0

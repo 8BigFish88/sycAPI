@@ -2,8 +2,11 @@ from flask import Flask
 from flask_restplus import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
+cors = CORS(app)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['PER_PAGE'] = 6
 db = SQLAlchemy(app)

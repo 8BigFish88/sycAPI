@@ -15,13 +15,13 @@ car_data_schema = CarDataSchema()
 carModel = cars.model('carModel', {
     'name' : fields.String(required=True, validate=True),
     'fuel' : fields.String(required=True, validate=True),
-    'matriculation': fields.DateTime(validate=True),
+    'matriculation': fields.Date(validate=True),
     'image_file' : fields.String(validate=True),
     'detected_kms': fields.Integer(validate=True),
-    'review_date': fields.DateTime(validate=True),
+    'review_date': fields.Date(validate=True),
     'check_km': fields.Integer(validate=True),
-    'assurance_date': fields.DateTime(validate=True),
-    'tax_date': fields.DateTime(validate=True),
+    'assurance_date': fields.Date(validate=True),
+    'tax_date': fields.Date(validate=True),
     'avarage_km': fields.Integer(validate=True)
 })
 
@@ -58,24 +58,25 @@ class CarById_Requests(Resource):
         car.name = request.get_json()['name'] if request.get_json()['name'] else car.name
         car.fuel = request.get_json()['fuel'] if request.get_json()['fuel'] else car.fuel
         car.image_file =  request.get_json()['image_file'] if request.get_json()['image_file'] else car.image_file
-        car.matriculation =  datetime.strptime(request.get_json()['matriculation'], '%m/%d/%Y') if request.get_json()['matriculation'] else car.matriculation
+        car.matriculation =  datetime.strptime(request.get_json()['matriculation'], '%Y-%m-%d') if request.get_json()['matriculation'] else car.matriculation
         car.id_user = request.args.get('id_user') if request.args.get('id_user') else car.id_user
         db.session.commit()
         car_data = request.get_json()
-        detected_kms = CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=1).first()
-        print(detected_kms)
-        detected_kms = car_data.get('detected_kms') if car_data.get('detected_kms') else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=1).first().dataInt
-        CarData.update_dataInt(car,1,detected_kms) 
-        if request.get_json()['review_date']:
-            CarData.update_dataDate(car,2,request.get_json()['review_date'])
-        check_km= request.get_json()['check_km'] if request.get_json()['check_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=3).first().dataInt
-        CarData.update_dataInt(car,3,check_km)
+        if car_data.get('detected_kms'):
+            detected_kms = car_data.get('detected_kms') 
+            CarData.update_dataInt(car,1,detected_kms) 
+        if car_data.get('review_date'):
+            CarData.update_dataDate(car,2,car_data.get('review_date'))
+        if request.get_json()['check_km']:
+            check_km = request.get_json()['check_km'] 
+            CarData.update_dataInt(car,3,check_km)
         if request.get_json()['assurance_date']:
             CarData.update_dataDate(car,4,request.get_json()['assurance_date'])
         if request.get_json()['tax_date']:
             CarData.update_dataDate(car,5,request.get_json()['tax_date'])
-        avarage_km= request.get_json()['avarage_km'] if request.get_json()['avarage_km'] else CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=6).first().dataInt
-        CarData.update_dataInt(car,6,avarage_km)
+        if request.get_json()['avarage_km']:
+            avarage_km= request.get_json()['avarage_km'] 
+            CarData.update_dataInt(car,6,avarage_km)
         db.session.commit()
         return jsonify(car_schema.dump(car))
 
@@ -124,7 +125,7 @@ class General_Car_Requests(Resource):
             id_user=request.args.get('id_user')
             new_car = Car(
             name=name,
-            matriculation=datetime.strptime(matriculation, '%m/%d/%Y'),
+            matriculation=datetime.strptime(matriculation, '%Y-%m-%d'),
             image_file=image_file,
             fuel=fuel,
             id_user=id_user)

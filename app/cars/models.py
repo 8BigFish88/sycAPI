@@ -34,7 +34,7 @@ class CarData(db.Model):
     # Metodo che occorre ad aggiungere dati di tipo DateTime nella tabella CarData
     @staticmethod
     def add_dataDate(car,carDataCode,value):
-        carValue = CarData(dataDate = datetime.strptime(value, '%m/%d/%Y'), carDataCode = carDataCode, car_author = car )
+        carValue = CarData(dataDate = datetime.strptime(value, '%Y-%m-%d'), carDataCode = carDataCode, car_author = car )
         db.session.add(carValue)
 
     # Metodo che occorre ad aggiornare dati di tipo intero nella tabella CarData
@@ -47,7 +47,7 @@ class CarData(db.Model):
     @staticmethod
     def update_dataDate(car,carDataCode,value):
         car_data =CarData.query.filter_by(id_car=car.id).filter_by(carDataCode=carDataCode).first()
-        car_data.dataDate = datetime.strptime(value, '%m/%d/%Y')
+        car_data.dataDate = datetime.strptime(value, '%Y-%m-%d')
 
     # Metodo che ritorna i km medi associati ad un'auto
     @staticmethod

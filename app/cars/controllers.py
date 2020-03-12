@@ -45,17 +45,17 @@ class CarById_Requests(Resource):
         response={}
         for car_data in car.carData:
             if car_data.carDataCode == 1:
-                response['detected_kms'] = car.dataInt
+                response['detected_kms'] = car_data.dataInt
             if car_data.carDataCode == 2:
-                response['review_date'] = car.dataDate
+                response['review_date'] = car_data.dataDate
             if car_data.carDataCode == 3:
-                response['check_km'] = car.dataInt
+                response['check_km'] = car_data.dataInt
             if car_data.carDataCode == 4:
-                response['assurance_date'] = car.dataDate
+                response['assurance_date'] = car_data.dataDate
             if car_data.carDataCode == 5:
-                response['tax_date'] = car.dataDate
+                response['tax_date'] = car_data.dataDate
             if car_data.carDataCode == 6:
-                response['avarage_km'] = car.dataInt
+                response['avarage_km'] = car_data.dataInt
         return jsonify(response)
             
 

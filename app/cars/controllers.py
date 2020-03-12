@@ -42,7 +42,8 @@ class CarById_Requests(Resource):
         car = Car.query.get(car_id)
         if not car:
             return 'car Not Found', 404
-        response={}
+        response = {}
+        response = car_schema.dump(car)
         for car_data in car.carData:
             if car_data.carDataCode == 1:
                 response['detected_kms'] = car_data.dataInt

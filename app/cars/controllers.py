@@ -48,13 +48,16 @@ class CarById_Requests(Resource):
             if car_data.carDataCode == 1:
                 response['detected_kms'] = car_data.dataInt
             if car_data.carDataCode == 2:
-                response['review_date'] = car_data.dataDate
+                schema_data = car_data_schema.dump(car_data)
+                response['review_date'] = schema_data['dataDate']
             if car_data.carDataCode == 3:
                 response['check_km'] = car_data.dataInt
             if car_data.carDataCode == 4:
-                response['assurance_date'] = car_data.dataDate
+                schema_data = car_data_schema.dump(car_data)
+                response['assurance_date'] = schema_data['dataDate']
             if car_data.carDataCode == 5:
-                response['tax_date'] = car_data.dataDate
+                schema_data = car_data_schema.dump(car_data)
+                response['tax_date'] = schema_data['dataDate']
             if car_data.carDataCode == 6:
                 response['avarage_km'] = car_data.dataInt
         return jsonify(response)

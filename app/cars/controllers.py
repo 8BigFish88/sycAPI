@@ -43,12 +43,37 @@ class CarById_Requests(Resource):
         if not car:
             return 'car Not Found', 404
         response={}
+        for car_data in car.carData:
+            if car_data.carDataCode == 1:
+                response['detected_kms'] = car.dataInt
+            if car_data.carDataCode == 2:
+                response['review_date'] = car.dataDate
+            if car_data.carDataCode == 3:
+                response['check_km'] = car.dataInt
+            if car_data.carDataCode == 4:
+                response['assurance_date'] = car.dataDate
+            if car_data.carDataCode == 5:
+                response['tax_date'] = car.dataDate
+            if car_data.carDataCode == 6:
+                response['avarage_km'] = car.dataInt
+        return jsonify(response)
+            
+
+
+
+    """
+    def get(self,car_id):
+        '''get a car'''
+        car = Car.query.get(car_id)
+        if not car:
+            return 'car Not Found', 404
+        response={}
         response['car']= car_schema.dump(car)
         response['car_data'] = []
         for car_data in car.carData:
             response['car_data'].append(car_data_schema.dump(car_data))
         return jsonify(response)
-
+    """
     @cars.expect(carModel,parserUserId , validate=True)
     def put(self,car_id):
         '''update car data'''

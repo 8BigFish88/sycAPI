@@ -122,10 +122,10 @@ class Car_reminders_requests(Resource):
         car = Car.query.get(car_id)
         if not car:
             return 'Car Not Found', 404
-        response = {}
+        #response = {}
         #response['car'] = car_schema.dump(car)
         #response['car_data'] = []
-        for carData in car.carData:
+        '''for carData in car.carData:
             if (carData.carDataCode == 2) and (CarData.revisione(car, carData.dataDate)):
                 carData.id_reminder = 7
                 response['review_date'] = reminder_schema.dump(
@@ -152,8 +152,8 @@ class Car_reminders_requests(Resource):
                 carData.id_reminder = None
             db.session.commit()
             # response['car_data'].append(reminder_schema.dump(carData.reminder))
-            # response['car_data'].append(car_data_schema.dump(carData))
-        return jsonify(response)
+            # response['car_data'].append(car_data_schema.dump(carData))'''
+        return jsonify(Reminder.update_reminders(car))
 
 
 @reminders.route('/car/<int:car_id>/<int:car_data_id>')
@@ -184,7 +184,9 @@ class User_reminders_requests(Resource):
         cars = []
         i = 0
         for car in user.cars:
-            cars.append({'id': car.id, 'name': car.name, 'reminders': 0})
+            reminders_text = Reminder.update_reminders(car)
+            cars.append({'id': car.id, 'name': car.name,
+                         'reminders': 0, 'reminders_text': reminders_text})
             for car_data in car.carData:
                 if car_data.reminder:
                     count += 1

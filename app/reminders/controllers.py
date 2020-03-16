@@ -189,6 +189,7 @@ class User_reminders_requests(Resource):
                          'reminders': 0, 'reminders_text': reminders_text})
             for car_data in car.carData:
                 if car_data.reminder:
+                    print(car_data.reminder.text)
                     count += 1
                     cars[i]['reminders'] += 1
             i += 1

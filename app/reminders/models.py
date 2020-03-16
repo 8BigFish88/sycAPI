@@ -20,7 +20,7 @@ class Reminder(db.Model):
                 carData.id_reminder = 7
                 response['review_date'] = carData.reminder.text
             elif (carData.carDataCode == 2) and not (CarData.revisione(car, carData.dataDate)):
-                carData.id_reminder == None
+                carData.id_reminder = None
             if (carData.carDataCode == 3) and (CarData.tagliando(car, carData.dataInt, CarData.GetKm(car, car.carData), CarData.GetDateDetection(car, car.carData))):
                 carData.id_reminder = 6
                 response['check_km'] = carData.reminder.text

@@ -6,5 +6,5 @@ flask-migrate
 flask-cors
 marshmallow-sqlalchemy
 psycopg2
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 gunicorn
